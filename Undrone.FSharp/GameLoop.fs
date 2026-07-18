@@ -25,6 +25,7 @@ type GameLoop(node: Node2D) =
         let world = new GameWorld()
         gameWorld <- Some world
         node.AddChild(world)
+        world.Initialize()
 
     member this.Ready() =
         // Setup Exit Confirmation Dialog

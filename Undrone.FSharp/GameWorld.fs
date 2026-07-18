@@ -5,7 +5,7 @@ open Godot
 type GameWorld() =
     inherit Node2D()
 
-    override this._Ready() =
+    member this.Initialize() =
         let texture = GD.Load<Texture2D>("res://assets/drone.svg")
         
         // Dynamically calculate the center of the screen
