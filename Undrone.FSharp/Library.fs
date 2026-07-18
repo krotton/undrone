@@ -73,11 +73,10 @@ type MainMenu(node: Node2D, confirmDialog: ConfirmationDialog) as this =
         this.AddChild(mainLayout)
 
 type GameLoop(node: Node2D) =
-    let mutable confirmDialog : ConfirmationDialog = null
+    let confirmDialog = new ConfirmationDialog()
 
     member this.Ready() =
         // Setup Exit Confirmation Dialog
-        confirmDialog <- new ConfirmationDialog()
         confirmDialog.Title <- "Exit Game"
         confirmDialog.DialogText <- "Are you sure you want to exit?"
         confirmDialog.Connect("confirmed", Callable.From(System.Action(fun () -> node.GetTree().Quit()))) |> ignore
