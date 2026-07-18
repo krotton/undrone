@@ -18,7 +18,7 @@ type GameLoop(node: Node2D) =
         let texture = GD.Load<Texture2D>("res://assets/logo.svg")
         let icon = new TextureRect()
         icon.Texture <- texture
-        icon.CustomMinimumSize <- Vector2(100.0f, 100.0f)
+        icon.CustomMinimumSize <- Vector2(110.0f, 110.0f)
         icon.ExpandMode <- TextureRect.ExpandModeEnum.IgnoreSize
         icon.StretchMode <- TextureRect.StretchModeEnum.KeepAspectCentered
         icon.SizeFlagsVertical <- Control.SizeFlags.ShrinkCenter
