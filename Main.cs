@@ -15,4 +15,9 @@ public partial class Main : Node2D
     {
         _gameLoop.Process(delta);
     }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        _gameLoop.UnhandledInput(@event);
+    }
 }

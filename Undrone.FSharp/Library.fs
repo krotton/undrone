@@ -3,6 +3,8 @@ namespace Undrone.FSharp
 open Godot
 
 type GameLoop(node: Node2D) =
+    let mutable confirmDialog : ConfirmationDialog = null
+
     member this.Ready() =
         // Create a CenterContainer that spans the whole screen
         let center = new CenterContainer()
@@ -34,6 +36,18 @@ type GameLoop(node: Node2D) =
         center.AddChild(hbox)
         node.AddChild(center)
 
+        // Setup Exit Confirmation Dialog
+        confirmDialog <- new ConfirmationDialog()
+        confirmDialog.Title <- "Exit Game"
+        confirmDialog.DialogText <- "Are you sure you want to exit?"
+        confirmDialog.Connect("confirmed", Callable.From(System.Action(fun () -> node.GetTree().Quit()))) |> ignore
+        node.AddChild(confirmDialog)
+
     member this.Process(delta: double) =
         // Game loop ticks will go here
         ()
+
+    member this.UnhandledInput(event: InputEvent) =
+        if event.IsActionPressed("ui_cancel") then
+            confirmDialog.PopupCentered()
+            node.GetViewport().SetInputAsHandled()
