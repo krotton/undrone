@@ -16,15 +16,15 @@ type GameWorld(mapData: MapData) =
 
     member this.Initialize() =
         // Set the drone starting position
-        basePosition <- Vector2(mapData.drone_start.x, mapData.drone_start.y)
+        basePosition <- Vector2(mapData.DroneStart.X, mapData.DroneStart.Y)
         drone.Position <- basePosition
         
         // Spawn tree sprites from the map data
         let treeTexture = GD.Load<Texture2D>("res://assets/tree.svg")
-        for treePos in mapData.trees do
+        for treePos in mapData.Trees do
             let tree = new Sprite2D(
                 Texture = treeTexture,
-                Position = Vector2(treePos.x, treePos.y),
+                Position = Vector2(treePos.X, treePos.Y),
                 Scale = Vector2(1.0f, 1.0f)
             )
             this.AddChild(tree)

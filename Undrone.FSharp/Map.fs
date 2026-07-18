@@ -4,10 +4,10 @@ open Godot
 open System.Text.Json
 
 [<CLIMutable>]
-type MapPosition = { x: float32; y: float32 }
+type MapPosition = { X: float32; Y: float32 }
 
 [<CLIMutable>]
-type MapData = { drone_start: MapPosition; trees: MapPosition[] }
+type MapData = { DroneStart: MapPosition; Trees: MapPosition[] }
 
 module MapLoader =
     let loadMap (mapPath: string) : MapData =
