@@ -25,7 +25,7 @@ type GameLoop(node: Node2D) =
         // and transition to GameWorld without maintaining mutable fields in GameLoop.
         let onNewGame = System.Action(fun () ->
             canvasLayer.QueueFree()
-            let world = new GameWorld()
+            let world = new GameWorld(Name = "GameWorld")
             node.AddChild(world)
             world.Initialize()
         )
@@ -35,8 +35,10 @@ type GameLoop(node: Node2D) =
         canvasLayer.AddChild(menu)
 
     member this.Process(delta: double) =
-        // Game loop ticks will go here
-        ()
+        // Retrieve and update the active GameWorld node dynamically
+        let world = node.GetNodeOrNull<GameWorld>("GameWorld")
+        if not (isNull world) then
+            world.Update(delta)
 
     member this.UnhandledInput(event: InputEvent) =
         if event.IsActionPressed("ui_cancel") then
