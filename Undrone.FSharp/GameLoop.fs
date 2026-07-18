@@ -19,11 +19,16 @@ type GameLoop(node: Node2D) =
         confirmDialog.Connect("confirmed", Callable.From(System.Action(this.OnExitConfirmed))) |> ignore
         node.AddChild(confirmDialog)
 
+        // Create CanvasLayer to host UI and handle screen-scale anchoring
+        let canvasLayer = new CanvasLayer()
+        node.AddChild(canvasLayer)
+
         // Instantiate and add MainMenu with delegates to GameLoop methods
         let onNewGame = System.Action(this.OnNewGame)
         let onExit = System.Action(this.OnExitRequested)
         let mainMenu = new MainMenu(onNewGame, onExit)
-        node.AddChild(mainMenu)
+        mainMenu.SetAnchorsPreset(Control.LayoutPreset.FullRect)
+        canvasLayer.AddChild(mainMenu)
 
     member this.Process(delta: double) =
         // Game loop ticks will go here
