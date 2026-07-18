@@ -2,7 +2,7 @@ namespace Undrone.FSharp
 
 open Godot
 
-type MainMenu(node: Node2D, confirmDialog: ConfirmationDialog) as this =
+type MainMenu(onNewGame: System.Action, onExit: System.Action) as this =
     inherit CenterContainer()
 
     do
@@ -67,9 +67,9 @@ type MainMenu(node: Node2D, confirmDialog: ConfirmationDialog) as this =
         )
         btnExit.AddThemeFontSizeOverride("font_size", 24)
         
-        // Connect buttons
-        btnExit.Connect("pressed", Callable.From(System.Action(fun () -> confirmDialog.PopupCentered()))) |> ignore
-        btnNewGame.Connect("pressed", Callable.From(System.Action(fun () -> GD.Print("New Game pressed")))) |> ignore
+        // Connect buttons using actions passed from parent
+        btnExit.Connect("pressed", Callable.From(onExit)) |> ignore
+        btnNewGame.Connect("pressed", Callable.From(onNewGame)) |> ignore
         
         menuVBox.AddChild(btnNewGame)
         menuVBox.AddChild(btnContinue)
@@ -79,17 +79,26 @@ type MainMenu(node: Node2D, confirmDialog: ConfirmationDialog) as this =
         this.AddChild(mainLayout)
 
 type GameLoop(node: Node2D) =
-    let confirmDialog = 
-        let dialog = new ConfirmationDialog(Title = "Exit Game", DialogText = "Are you sure you want to exit?")
-        dialog.Connect("confirmed", Callable.From(System.Action(fun () -> node.GetTree().Quit()))) |> ignore
-        dialog
+    let confirmDialog = new ConfirmationDialog(Title = "Exit Game", DialogText = "Are you sure you want to exit?")
+
+    member this.OnExitConfirmed() =
+        node.GetTree().Quit()
+
+    member this.OnExitPressed() =
+        confirmDialog.PopupCentered()
+
+    member this.OnNewGamePressed() =
+        GD.Print("New Game pressed")
 
     member this.Ready() =
         // Setup Exit Confirmation Dialog
+        confirmDialog.Connect("confirmed", Callable.From(System.Action(this.OnExitConfirmed))) |> ignore
         node.AddChild(confirmDialog)
 
-        // Instantiate and add MainMenu
-        let mainMenu = new MainMenu(node, confirmDialog)
+        // Instantiate and add MainMenu with delegates to GameLoop methods
+        let onNewGame = System.Action(this.OnNewGamePressed)
+        let onExit = System.Action(this.OnExitPressed)
+        let mainMenu = new MainMenu(onNewGame, onExit)
         node.AddChild(mainMenu)
 
     member this.Process(delta: double) =
@@ -98,5 +107,5 @@ type GameLoop(node: Node2D) =
 
     member this.UnhandledInput(event: InputEvent) =
         if event.IsActionPressed("ui_cancel") then
-            confirmDialog.PopupCentered()
+            this.OnExitPressed()
             node.GetViewport().SetInputAsHandled()
