@@ -2,21 +2,43 @@ namespace Undrone.FSharp
 
 open Godot
 
-type DroneInstance(texture: Texture2D, startPosition: Vector2) =
-    let sprite = new Sprite2D(
-        Texture = texture,
-        Position = startPosition,
-        Scale = Vector2(0.5f, 0.5f)
-    )
-    member this.Sprite = sprite
-    member val BasePosition = startPosition with get, set
-    member val CurrentOffset = Vector2.Zero with get, set
+[<AllowNullLiteral>]
+type Drone(startPosition: Vector2) as this =
+    inherit Sprite2D()
+
+    let mutable basePosition = startPosition
+    let mutable currentOffset = Vector2.Zero
+
+    do
+        this.Texture <- GD.Load<Texture2D>("res://assets/drone.svg")
+        this.Scale <- Vector2(0.5f, 0.5f)
+        this.Position <- startPosition
+
+    member this.Update(delta: double, velocity: Vector2, isMoving: bool, index: int) =
+        // Update basePosition
+        basePosition <- basePosition + velocity * (float32 delta)
+
+        // Calculate the target waving offset with a phase shift per drone
+        let targetOffset = 
+            if not isMoving then
+                let timeSeconds = (float32 (Time.GetTicksMsec())) / 1000.0f
+                let amplitude = 12.0f
+                let frequency = 3.0f
+                let phase = (float32 index) * 1.5f
+                Vector2(amplitude * sin(frequency * timeSeconds + phase), 0.0f)
+            else
+                Vector2.Zero
+
+        // Smoothly interpolate currentOffset towards targetOffset
+        currentOffset <- currentOffset.Lerp(targetOffset, float32 (10.0 * delta))
+
+        this.Position <- basePosition + currentOffset
 
 [<AllowNullLiteral>]
 type GameWorld(mapData: MapData) =
     inherit Node2D()
 
-    let mutable drones : DroneInstance[] = [||]
+    let mutable drones : Drone[] = [||]
 
     member this.Initialize() =
         // Spawn tree sprites from the map data
@@ -30,12 +52,11 @@ type GameWorld(mapData: MapData) =
             this.AddChild(tree)
             
         // Spawn drones from the map data
-        let droneTexture = GD.Load<Texture2D>("res://assets/drone.svg")
         drones <- 
             mapData.Drones 
             |> Array.map (fun pos -> 
-                let d = new DroneInstance(droneTexture, Vector2(pos.X, pos.Y))
-                this.AddChild(d.Sprite)
+                let d = new Drone(Vector2(pos.X, pos.Y))
+                this.AddChild(d)
                 d
             )
 
@@ -58,25 +79,5 @@ type GameWorld(mapData: MapData) =
                 Vector2.Zero
 
         // Update each drone position and waving offset
-        let timeSeconds = (float32 (Time.GetTicksMsec())) / 1000.0f
-
         for i in 0 .. drones.Length - 1 do
-            let d = drones.[i]
-            
-            // Update basePosition
-            d.BasePosition <- d.BasePosition + velocity * (float32 delta)
-
-            // Calculate the target waving offset with a phase shift per drone
-            let targetOffset = 
-                if not isMoving then
-                    let amplitude = 12.0f
-                    let frequency = 3.0f
-                    let phase = (float32 i) * 1.5f
-                    Vector2(amplitude * sin(frequency * timeSeconds + phase), 0.0f)
-                else
-                    Vector2.Zero
-
-            // Smoothly interpolate currentOffset towards targetOffset
-            d.CurrentOffset <- d.CurrentOffset.Lerp(targetOffset, float32 (10.0 * delta))
-
-            d.Sprite.Position <- d.BasePosition + d.CurrentOffset
+            drones.[i].Update(delta, velocity, isMoving, i)
