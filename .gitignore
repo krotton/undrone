@@ -18,3 +18,5 @@ obj/
 *.userosscache
 *.sln.docstates
 .vs/
+build/
+
