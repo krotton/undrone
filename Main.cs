@@ -7,7 +7,6 @@ public partial class Main : Node2D
 
     public override void _Ready()
     {
-        GD.Print("C# Host: Initializing F# GameLoop...");
         _gameLoop = new GameLoop(this);
         _gameLoop.Ready();
     }
