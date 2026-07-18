@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Undrone", "Undrone.csproj", "{474F201C-E73F-4FDF-A468-1D77CD220790}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Undrone.FSharp", "Undrone.FSharp\Undrone.FSharp.fsproj", "{E7CD663E-512E-4EF0-8ED9-3543A7BA84C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ExportDebug|Any CPU = ExportDebug|Any CPU
+		ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{474F201C-E73F-4FDF-A468-1D77CD220790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474F201C-E73F-4FDF-A468-1D77CD220790}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474F201C-E73F-4FDF-A468-1D77CD220790}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{474F201C-E73F-4FDF-A468-1D77CD220790}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{474F201C-E73F-4FDF-A468-1D77CD220790}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{474F201C-E73F-4FDF-A468-1D77CD220790}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{E7CD663E-512E-4EF0-8ED9-3543A7BA84C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7CD663E-512E-4EF0-8ED9-3543A7BA84C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7CD663E-512E-4EF0-8ED9-3543A7BA84C2}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{E7CD663E-512E-4EF0-8ED9-3543A7BA84C2}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{E7CD663E-512E-4EF0-8ED9-3543A7BA84C2}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{E7CD663E-512E-4EF0-8ED9-3543A7BA84C2}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
