@@ -10,9 +10,13 @@ type GameLoop(node: Node2D) =
         let center = new CenterContainer()
         center.CustomMinimumSize <- Vector2(1152.0f, 648.0f)
         
-        // HBoxContainer inside it to align icon and text horizontally
-        let hbox = new HBoxContainer()
-        hbox.AddThemeConstantOverride("separation", 20)
+        // VBoxContainer to align the logo and the menu vertically
+        let mainLayout = new VBoxContainer()
+        mainLayout.AddThemeConstantOverride("separation", 40)
+        
+        // HBoxContainer to align icon and text horizontally
+        let logoHBox = new HBoxContainer()
+        logoHBox.AddThemeConstantOverride("separation", 20)
         
         // Icon (TextureRect loaded from logo.svg)
         let texture = GD.Load<Texture2D>("res://assets/logo.svg")
@@ -31,17 +35,52 @@ type GameLoop(node: Node2D) =
         label.ScrollActive <- false
         label.SizeFlagsVertical <- Control.SizeFlags.ShrinkCenter
         
-        hbox.AddChild(icon)
-        hbox.AddChild(label)
-        center.AddChild(hbox)
-        node.AddChild(center)
-
-        // Setup Exit Confirmation Dialog
+        logoHBox.AddChild(icon)
+        logoHBox.AddChild(label)
+        mainLayout.AddChild(logoHBox)
+        
+        // Setup Exit Confirmation Dialog first (so we can connect the button to it)
         confirmDialog <- new ConfirmationDialog()
         confirmDialog.Title <- "Exit Game"
         confirmDialog.DialogText <- "Are you sure you want to exit?"
         confirmDialog.Connect("confirmed", Callable.From(System.Action(fun () -> node.GetTree().Quit()))) |> ignore
         node.AddChild(confirmDialog)
+
+        // Menu VBoxContainer
+        let menuVBox = new VBoxContainer()
+        menuVBox.AddThemeConstantOverride("separation", 15)
+        menuVBox.SizeFlagsHorizontal <- Control.SizeFlags.ShrinkCenter
+        
+        // 1. New Game Button
+        let btnNewGame = new Button()
+        btnNewGame.Text <- "New Game"
+        btnNewGame.CustomMinimumSize <- Vector2(250.0f, 50.0f)
+        btnNewGame.AddThemeFontSizeOverride("font_size", 24)
+        
+        // 2. Continue Button (disabled)
+        let btnContinue = new Button()
+        btnContinue.Text <- "Continue"
+        btnContinue.Disabled <- true
+        btnContinue.CustomMinimumSize <- Vector2(250.0f, 50.0f)
+        btnContinue.AddThemeFontSizeOverride("font_size", 24)
+        
+        // 3. Exit Button
+        let btnExit = new Button()
+        btnExit.Text <- "Exit"
+        btnExit.CustomMinimumSize <- Vector2(250.0f, 50.0f)
+        btnExit.AddThemeFontSizeOverride("font_size", 24)
+        
+        // Connect buttons
+        btnExit.Connect("pressed", Callable.From(System.Action(fun () -> confirmDialog.PopupCentered()))) |> ignore
+        btnNewGame.Connect("pressed", Callable.From(System.Action(fun () -> GD.Print("New Game pressed")))) |> ignore
+        
+        menuVBox.AddChild(btnNewGame)
+        menuVBox.AddChild(btnContinue)
+        menuVBox.AddChild(btnExit)
+        mainLayout.AddChild(menuVBox)
+        
+        center.AddChild(mainLayout)
+        node.AddChild(center)
 
     member this.Process(delta: double) =
         // Game loop ticks will go here
