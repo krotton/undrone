@@ -12,6 +12,7 @@ type GameWorld() =
     )
 
     let mutable basePosition = Vector2.Zero
+    let mutable currentOffset = Vector2.Zero
 
     member this.Initialize() =
         // Dynamically calculate the center of the screen
@@ -40,8 +41,8 @@ type GameWorld() =
         // Update basePosition
         basePosition <- basePosition + velocity * (float32 delta)
 
-        // Apply a gentle horizontal waving offset when idle
-        let waveOffset = 
+        // Calculate the target waving offset
+        let targetOffset = 
             if not isMoving then
                 let timeSeconds = (float32 (Time.GetTicksMsec())) / 1000.0f
                 let amplitude = 12.0f
@@ -50,4 +51,7 @@ type GameWorld() =
             else
                 Vector2.Zero
 
-        drone.Position <- basePosition + waveOffset
+        // Smoothly interpolate currentOffset towards targetOffset
+        currentOffset <- currentOffset.Lerp(targetOffset, float32 (10.0 * delta))
+
+        drone.Position <- basePosition + currentOffset
