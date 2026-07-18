@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Include="Map.fs" />
     <Compile Include="MainMenu.fs" />
+    <Compile Include="Drone.fs" />
+    <Compile Include="TreeSprite.fs" />
     <Compile Include="GameWorld.fs" />
     <Compile Include="GameLoop.fs" />
   </ItemGroup>
