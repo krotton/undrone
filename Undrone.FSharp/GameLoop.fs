@@ -8,10 +8,10 @@ type GameLoop(node: Node2D) =
     member this.OnExitConfirmed() =
         node.GetTree().Quit()
 
-    member this.OnExitPressed() =
+    member this.OnExitRequested() =
         confirmDialog.PopupCentered()
 
-    member this.OnNewGamePressed() =
+    member this.OnNewGame() =
         GD.Print("New Game pressed")
 
     member this.Ready() =
@@ -20,8 +20,8 @@ type GameLoop(node: Node2D) =
         node.AddChild(confirmDialog)
 
         // Instantiate and add MainMenu with delegates to GameLoop methods
-        let onNewGame = System.Action(this.OnNewGamePressed)
-        let onExit = System.Action(this.OnExitPressed)
+        let onNewGame = System.Action(this.OnNewGame)
+        let onExit = System.Action(this.OnExitRequested)
         let mainMenu = new MainMenu(onNewGame, onExit)
         node.AddChild(mainMenu)
 
@@ -31,5 +31,5 @@ type GameLoop(node: Node2D) =
 
     member this.UnhandledInput(event: InputEvent) =
         if event.IsActionPressed("ui_cancel") then
-            this.OnExitPressed()
+            this.OnExitRequested()
             node.GetViewport().SetInputAsHandled()
