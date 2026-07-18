@@ -6,4 +6,4 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 echo Launching game...
-godot --path "%~dp0"
+godot --path "%~dp0."
