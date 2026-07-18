@@ -4,8 +4,6 @@ open Godot
 
 type GameLoop(node: Node2D) =
     member this.Ready() =
-        GD.Print("Hello from F# in Godot!")
-        
         // Create a CenterContainer that spans the whole screen
         let center = new CenterContainer()
         center.CustomMinimumSize <- Vector2(1152.0f, 648.0f)
