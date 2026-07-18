@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="MainMenu.fs" />
+    <Compile Include="GameWorld.fs" />
     <Compile Include="GameLoop.fs" />
   </ItemGroup>
 

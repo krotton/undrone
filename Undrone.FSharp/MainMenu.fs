@@ -17,7 +17,7 @@ type MainMenu(onNewGame: System.Action, onExit: System.Action) as this =
         logoHBox.AddThemeConstantOverride("separation", 20)
         
         // Icon (TextureRect loaded from logo.svg)
-        let texture = GD.Load<Texture2D>("res://assets/logo.svg")
+        let texture = GD.Load<Texture2D>("res://assets/drone.svg")
         let icon = new TextureRect(
             Texture = texture,
             CustomMinimumSize = Vector2(110.0f, 110.0f),
