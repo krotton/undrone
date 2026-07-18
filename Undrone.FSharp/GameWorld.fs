@@ -18,6 +18,17 @@ type GameWorld() =
         // Dynamically calculate the center of the screen
         basePosition <- this.GetViewportRect().Size / 2.0f
         drone.Position <- basePosition
+        
+        // Add a static tree sprite to the world
+        let treeTexture = GD.Load<Texture2D>("res://assets/tree.svg")
+        let tree = new Sprite2D(
+            Texture = treeTexture,
+            Position = Vector2(basePosition.X - 250.0f, basePosition.Y + 50.0f),
+            Scale = Vector2(1.0f, 1.0f)
+        )
+        this.AddChild(tree)
+        
+        // Add the drone last so it renders on top
         this.AddChild(drone)
 
     member this.Update(delta: double) =
@@ -45,13 +56,13 @@ type GameWorld() =
         let targetOffset = 
             if not isMoving then
                 let timeSeconds = (float32 (Time.GetTicksMsec())) / 1000.0f
-                let amplitude = 12.0f
+                let amplitude = 30.0f
                 let frequency = 3.0f
                 Vector2(amplitude * sin(frequency * timeSeconds), 0.0f)
             else
                 Vector2.Zero
 
         // Smoothly interpolate currentOffset towards targetOffset
-        currentOffset <- currentOffset.Lerp(targetOffset, float32 (10.0 * delta))
+        currentOffset <- currentOffset.Lerp(targetOffset, float32 (3.0 * delta))
 
         drone.Position <- basePosition + currentOffset
