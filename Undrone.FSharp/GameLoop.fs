@@ -25,7 +25,8 @@ type GameLoop(node: Node2D) =
         // and transition to GameWorld without maintaining mutable fields in GameLoop.
         let onNewGame = System.Action(fun () ->
             canvasLayer.QueueFree()
-            let world = new GameWorld("res://maps/map_sample.json", Name = "GameWorld")
+            let mapData = MapLoader.loadMap "res://maps/map_sample.json"
+            let world = new GameWorld(mapData, Name = "GameWorld")
             node.AddChild(world)
             world.Initialize()
         )

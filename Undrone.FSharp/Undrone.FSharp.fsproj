@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Map.fs" />
     <Compile Include="MainMenu.fs" />
     <Compile Include="GameWorld.fs" />
     <Compile Include="GameLoop.fs" />

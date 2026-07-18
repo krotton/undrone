@@ -1,16 +1,9 @@
 namespace Undrone.FSharp
 
 open Godot
-open System.Text.Json
-
-[<CLIMutable>]
-type MapPosition = { x: float32; y: float32 }
-
-[<CLIMutable>]
-type MapData = { drone_start: MapPosition; trees: MapPosition[] }
 
 [<AllowNullLiteral>]
-type GameWorld(mapPath: string) =
+type GameWorld(mapData: MapData) =
     inherit Node2D()
 
     let drone = new Sprite2D(
@@ -22,10 +15,6 @@ type GameWorld(mapPath: string) =
     let mutable currentOffset = Vector2.Zero
 
     member this.Initialize() =
-        // Load and parse the JSON map
-        let jsonText = FileAccess.GetFileAsString(mapPath)
-        let mapData = JsonSerializer.Deserialize<MapData>(jsonText)
-
         // Set the drone starting position
         basePosition <- Vector2(mapData.drone_start.x, mapData.drone_start.y)
         drone.Position <- basePosition
