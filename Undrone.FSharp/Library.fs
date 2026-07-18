@@ -18,47 +18,53 @@ type MainMenu(node: Node2D, confirmDialog: ConfirmationDialog) as this =
         
         // Icon (TextureRect loaded from logo.svg)
         let texture = GD.Load<Texture2D>("res://assets/logo.svg")
-        let icon = new TextureRect()
-        icon.Texture <- texture
-        icon.CustomMinimumSize <- Vector2(110.0f, 110.0f)
-        icon.ExpandMode <- TextureRect.ExpandModeEnum.IgnoreSize
-        icon.StretchMode <- TextureRect.StretchModeEnum.KeepAspectCentered
-        icon.SizeFlagsVertical <- Control.SizeFlags.ShrinkCenter
+        let icon = new TextureRect(
+            Texture = texture,
+            CustomMinimumSize = Vector2(110.0f, 110.0f),
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+            SizeFlagsVertical = Control.SizeFlags.ShrinkCenter
+        )
         
         // Text (RichTextLabel with BBCode styling)
-        let label = new RichTextLabel()
-        label.BbcodeEnabled <- true
-        label.Text <- "[font_size=80][b]Un[color=#00f3ff]drone[/color][/b][/font_size]"
-        label.CustomMinimumSize <- Vector2(400.0f, 110.0f)
-        label.ScrollActive <- false
-        label.SizeFlagsVertical <- Control.SizeFlags.ShrinkCenter
+        let label = new RichTextLabel(
+            BbcodeEnabled = true,
+            Text = "[font_size=80][b]Un[color=#00f3ff]drone[/color][/b][/font_size]",
+            CustomMinimumSize = Vector2(400.0f, 110.0f),
+            ScrollActive = false,
+            SizeFlagsVertical = Control.SizeFlags.ShrinkCenter
+        )
         
         logoHBox.AddChild(icon)
         logoHBox.AddChild(label)
         mainLayout.AddChild(logoHBox)
 
         // Menu VBoxContainer
-        let menuVBox = new VBoxContainer()
+        let menuVBox = new VBoxContainer(
+            SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter
+        )
         menuVBox.AddThemeConstantOverride("separation", 15)
-        menuVBox.SizeFlagsHorizontal <- Control.SizeFlags.ShrinkCenter
         
         // 1. New Game Button
-        let btnNewGame = new Button()
-        btnNewGame.Text <- "New Game"
-        btnNewGame.CustomMinimumSize <- Vector2(250.0f, 50.0f)
+        let btnNewGame = new Button(
+            Text = "New Game",
+            CustomMinimumSize = Vector2(250.0f, 50.0f)
+        )
         btnNewGame.AddThemeFontSizeOverride("font_size", 24)
         
         // 2. Continue Button (disabled)
-        let btnContinue = new Button()
-        btnContinue.Text <- "Continue"
-        btnContinue.Disabled <- true
-        btnContinue.CustomMinimumSize <- Vector2(250.0f, 50.0f)
+        let btnContinue = new Button(
+            Text = "Continue",
+            Disabled = true,
+            CustomMinimumSize = Vector2(250.0f, 50.0f)
+        )
         btnContinue.AddThemeFontSizeOverride("font_size", 24)
         
         // 3. Exit Button
-        let btnExit = new Button()
-        btnExit.Text <- "Exit"
-        btnExit.CustomMinimumSize <- Vector2(250.0f, 50.0f)
+        let btnExit = new Button(
+            Text = "Exit",
+            CustomMinimumSize = Vector2(250.0f, 50.0f)
+        )
         btnExit.AddThemeFontSizeOverride("font_size", 24)
         
         // Connect buttons
