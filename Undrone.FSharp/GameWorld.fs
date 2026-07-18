@@ -35,6 +35,15 @@ type Drone(startPosition: Vector2) as this =
         this.Position <- basePosition + currentOffset
 
 [<AllowNullLiteral>]
+type Tree(startPosition: Vector2) as this =
+    inherit Sprite2D()
+
+    do
+        this.Texture <- GD.Load<Texture2D>("res://assets/tree.svg")
+        this.Scale <- Vector2(1.0f, 1.0f)
+        this.Position <- startPosition
+
+[<AllowNullLiteral>]
 type GameWorld(mapData: MapData) =
     inherit Node2D()
 
@@ -42,13 +51,8 @@ type GameWorld(mapData: MapData) =
 
     member this.Initialize() =
         // Spawn tree sprites from the map data
-        let treeTexture = GD.Load<Texture2D>("res://assets/tree.svg")
         for treePos in mapData.Trees do
-            let tree = new Sprite2D(
-                Texture = treeTexture,
-                Position = Vector2(treePos.X, treePos.Y),
-                Scale = Vector2(1.0f, 1.0f)
-            )
+            let tree = new Tree(Vector2(treePos.X, treePos.Y))
             this.AddChild(tree)
             
         // Spawn drones from the map data
