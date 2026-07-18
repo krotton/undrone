@@ -2,13 +2,11 @@ namespace Undrone.FSharp
 
 open Godot
 
-type GameLoop(node: Node2D) =
-    let mutable confirmDialog : ConfirmationDialog = null
+type MainMenu(node: Node2D, confirmDialog: ConfirmationDialog) as this =
+    inherit CenterContainer()
 
-    member this.Ready() =
-        // Create a CenterContainer that spans the whole screen
-        let center = new CenterContainer()
-        center.CustomMinimumSize <- Vector2(1152.0f, 648.0f)
+    do
+        this.CustomMinimumSize <- Vector2(1152.0f, 648.0f)
         
         // VBoxContainer to align the logo and the menu vertically
         let mainLayout = new VBoxContainer()
@@ -38,13 +36,6 @@ type GameLoop(node: Node2D) =
         logoHBox.AddChild(icon)
         logoHBox.AddChild(label)
         mainLayout.AddChild(logoHBox)
-        
-        // Setup Exit Confirmation Dialog first (so we can connect the button to it)
-        confirmDialog <- new ConfirmationDialog()
-        confirmDialog.Title <- "Exit Game"
-        confirmDialog.DialogText <- "Are you sure you want to exit?"
-        confirmDialog.Connect("confirmed", Callable.From(System.Action(fun () -> node.GetTree().Quit()))) |> ignore
-        node.AddChild(confirmDialog)
 
         // Menu VBoxContainer
         let menuVBox = new VBoxContainer()
@@ -79,8 +70,22 @@ type GameLoop(node: Node2D) =
         menuVBox.AddChild(btnExit)
         mainLayout.AddChild(menuVBox)
         
-        center.AddChild(mainLayout)
-        node.AddChild(center)
+        this.AddChild(mainLayout)
+
+type GameLoop(node: Node2D) =
+    let mutable confirmDialog : ConfirmationDialog = null
+
+    member this.Ready() =
+        // Setup Exit Confirmation Dialog
+        confirmDialog <- new ConfirmationDialog()
+        confirmDialog.Title <- "Exit Game"
+        confirmDialog.DialogText <- "Are you sure you want to exit?"
+        confirmDialog.Connect("confirmed", Callable.From(System.Action(fun () -> node.GetTree().Quit()))) |> ignore
+        node.AddChild(confirmDialog)
+
+        // Instantiate and add MainMenu
+        let mainMenu = new MainMenu(node, confirmDialog)
+        node.AddChild(mainMenu)
 
     member this.Process(delta: double) =
         // Game loop ticks will go here
