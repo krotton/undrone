@@ -4,11 +4,12 @@ open Godot
 
 type GameLoop(node: Node2D) =
     member this.Ready() =
-        let label = new Label()
-        label.Text <- "Undrone"
-        label.Position <- Vector2(150.0f, 150.0f)
-        label.AddThemeFontSizeOverride("font_size", 64)
-        node.AddChild(label)
+        let texture = GD.Load<Texture2D>("res://assets/logo.jpg")
+        let sprite = new Sprite2D()
+        sprite.Texture <- texture
+        sprite.Position <- Vector2(576.0f, 324.0f)
+        sprite.Scale <- Vector2(0.5f, 0.5f)
+        node.AddChild(sprite)
 
     member this.Process(delta: double) =
         // Game loop ticks will go here
