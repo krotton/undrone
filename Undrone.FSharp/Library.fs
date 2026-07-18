@@ -4,12 +4,37 @@ open Godot
 
 type GameLoop(node: Node2D) =
     member this.Ready() =
+        GD.Print("Hello from F# in Godot!")
+        
+        // Create a CenterContainer that spans the whole screen
+        let center = new CenterContainer()
+        center.CustomMinimumSize <- Vector2(1152.0f, 648.0f)
+        
+        // HBoxContainer inside it to align icon and text horizontally
+        let hbox = new HBoxContainer()
+        hbox.AddThemeConstantOverride("separation", 20)
+        
+        // Icon (TextureRect loaded from logo.svg)
         let texture = GD.Load<Texture2D>("res://assets/logo.svg")
-        let sprite = new Sprite2D()
-        sprite.Texture <- texture
-        sprite.Position <- Vector2(576.0f, 324.0f)
-        sprite.Scale <- Vector2(0.5f, 0.5f)
-        node.AddChild(sprite)
+        let icon = new TextureRect()
+        icon.Texture <- texture
+        icon.CustomMinimumSize <- Vector2(100.0f, 100.0f)
+        icon.ExpandMode <- TextureRect.ExpandModeEnum.IgnoreSize
+        icon.StretchMode <- TextureRect.StretchModeEnum.KeepAspectCentered
+        icon.SizeFlagsVertical <- Control.SizeFlags.ShrinkCenter
+        
+        // Text (RichTextLabel with BBCode styling)
+        let label = new RichTextLabel()
+        label.BbcodeEnabled <- true
+        label.Text <- "[font_size=80][b]Un[color=#00f3ff]drone[/color][/b][/font_size]"
+        label.CustomMinimumSize <- Vector2(400.0f, 110.0f)
+        label.ScrollActive <- false
+        label.SizeFlagsVertical <- Control.SizeFlags.ShrinkCenter
+        
+        hbox.AddChild(icon)
+        hbox.AddChild(label)
+        center.AddChild(hbox)
+        node.AddChild(center)
 
     member this.Process(delta: double) =
         // Game loop ticks will go here

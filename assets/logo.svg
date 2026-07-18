@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
   <!-- Drone Icon -->
   <g stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none">
-    <!-- X-frame arms -->
+    <!-- X-frame arms (centered around 100, 100) -->
     <line x1="60" y1="60" x2="140" y2="140" />
     <line x1="140" y1="60" x2="60" y2="140" />
     
@@ -16,10 +16,4 @@
     <!-- Inner glowing cyan core -->
     <circle cx="100" cy="100" r="8" fill="#00f3ff" stroke="none" />
   </g>
-  
-  <!-- Typography -->
-  <text x="200" y="130" font-family="'Segoe UI', -apple-system, Roboto, sans-serif" font-size="85" font-weight="900" letter-spacing="2">
-    <tspan fill="#ffffff">Un</tspan>
-    <tspan fill="#00f3ff">drone</tspan>
-  </text>
 </svg>
