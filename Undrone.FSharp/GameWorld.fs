@@ -11,9 +11,12 @@ type GameWorld() =
         Scale = Vector2(0.5f, 0.5f)
     )
 
+    let mutable basePosition = Vector2.Zero
+
     member this.Initialize() =
         // Dynamically calculate the center of the screen
-        drone.Position <- this.GetViewportRect().Size / 2.0f
+        basePosition <- this.GetViewportRect().Size / 2.0f
+        drone.Position <- basePosition
         this.AddChild(drone)
 
     member this.Update(delta: double) =
@@ -26,10 +29,25 @@ type GameWorld() =
             (if Input.IsActionPressed("ui_up") then 1.0f else 0.0f)
         
         let direction = Vector2(dx, dy)
+        let isMoving = direction.LengthSquared() > 0.0f
+
         let velocity = 
-            if direction.LengthSquared() > 0.0f then
+            if isMoving then
                 direction.Normalized() * 400.0f
             else
                 Vector2.Zero
 
-        drone.Position <- drone.Position + velocity * (float32 delta)
+        // Update basePosition
+        basePosition <- basePosition + velocity * (float32 delta)
+
+        // Apply a gentle horizontal waving offset when idle
+        let waveOffset = 
+            if not isMoving then
+                let timeSeconds = (float32 (Time.GetTicksMsec())) / 1000.0f
+                let amplitude = 12.0f
+                let frequency = 3.0f
+                Vector2(amplitude * sin(frequency * timeSeconds), 0.0f)
+            else
+                Vector2.Zero
+
+        drone.Position <- basePosition + waveOffset
