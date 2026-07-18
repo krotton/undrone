@@ -7,7 +7,7 @@ open System.Text.Json
 type MapPosition = { X: float32; Y: float32 }
 
 [<CLIMutable>]
-type MapData = { DroneStart: MapPosition; Trees: MapPosition[] }
+type MapData = { Drones: MapPosition[]; Trees: MapPosition[] }
 
 module MapLoader =
     let loadMap (mapPath: string) : MapData =
